@@ -1,0 +1,69 @@
+<html ng-app="friendsApp">
+	<head>
+		<title>Friends</title>
+
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js">
+		</script>
+
+		<script type="text/javascript">
+			var friendsApp = angular.module('friendsApp', []);
+			
+			friendsApp.factory('FriendFactory', function($http) {
+				var factory = {};
+				var friends = [];
+
+				factory.index = function(callback) {
+			    $http.get('/friends').success(function(output) {
+			    	friends = output;
+			    	callback(friends);
+			    })
+			  }
+
+
+
+				factory.getFriends = function(callback) {
+					$http.get('/friends').success(function(output) {
+						friends = output;
+						callback(friends);
+					})
+				}
+
+				factory.create = function(info, callback) {
+					friends.push(
+						{name: info.name, age: info.age}
+					);
+					callback(friends);
+				}
+				return factory;
+			});
+
+
+			friendsApp.controller('FriendsController', function ($scope, FriendFactory) {
+				FriendFactory.index(function(data) {
+					$scope.friends = data;
+				});
+
+				$scope.addFriend = function() {
+					FriendFactory.create($scope.new_friend, function() {
+						$scope.friends = FriendFactory.index();
+						$scope.new_friend = {};
+					});
+				}
+			})
+		</script>
+	</head>
+	<body ng-controller="FriendsController">
+		<h1>Friends</h1>
+		<input type="text" ng-model="filter_name" placeholder"filter">
+		{{filter_name}}
+		<ul>
+			<li ng-repeat="friend in friends | filter: filter_name">
+				{{friend.name}}, {{friend.age}}
+			</li>
+		</ul>
+		<h1>Add a Friend</h1>
+		<input type="text" ng-model="new_friend.name" placeholder="Name">
+		<input type="text" ng-model="new_friend.age" placeholder="Age">
+		<input type="submit" ng-click="addFriend()">
+	</body>
+</html>

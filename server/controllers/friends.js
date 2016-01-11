@@ -12,6 +12,17 @@ module.exports = (function() {
 					res.json(results);
 				}
 			})
+		},
+
+		create: function(req, res) {
+			var friend = new Friend(req.body);
+			friend.save(function(err) {
+				if(err) {
+	      console.log('Nope');
+	    	} else { 
+	      console.log(friend);
+	    	}
+			})
 		}
 	}
 })();

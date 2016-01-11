@@ -2,12 +2,13 @@
 	<head>
 		<title>Friends</title>
 
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js">
-		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 
 		<script type="text/javascript">
 			var friendsApp = angular.module('friendsApp', []);
 			
+
+			//FACTORY
 			friendsApp.factory('FriendFactory', function($http) {
 				var factory = {};
 				var friends = [];
@@ -29,16 +30,20 @@
 				}
 
 				factory.create = function(info, callback) {
-					friends.push(
-						{name: info.name, age: info.age}
-					);
-					callback(friends);
+					$http.post('/friends', info).success(function(output) {
+						friends.push(
+							{name: info.name, age: info.age}
+						);
+						friends = output;
+						callback(friends);
+					})	
 				}
 				return factory;
 			});
 
-
+			//CONTROLLER
 			friendsApp.controller('FriendsController', function ($scope, FriendFactory) {
+
 				FriendFactory.index(function(data) {
 					$scope.friends = data;
 				});

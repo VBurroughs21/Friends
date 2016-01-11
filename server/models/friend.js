@@ -5,4 +5,4 @@ var FriendSchema = new mongoose.Schema( {
 	age: Number
 });
 
-mongoose.model('Friend', FriendSchema);
+var Friend = mongoose.model('Friend', FriendSchema);

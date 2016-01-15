@@ -20,9 +20,16 @@ module.exports = (function() {
 				if(err) {
 	      	console.log('Nope');
 	    	} else { 
-	      	console.log(friend);
 	      	res.json(friend);
 	    	}
+			})
+		},
+
+		delete: function(req, res) {
+			Friend.remove({_id: req.params.friend_id}, function(err) {
+				if (err) {
+					console.log('Still there.');
+				} 
 			})
 		}
 	}

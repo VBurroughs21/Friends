@@ -15,14 +15,16 @@
 				factory.friend = {};
 
 				factory.index = function(callback) {
-			    $http.get('/friends').success(function(output) {
+			    $http.get('/friends')
+			    .success(function(output) {
 			    	friends = output;
 			    	callback(friends);
 			    })
 			  }
 
 				factory.create = function(info, callback) {
-					$http.post('/friends', info).success(function(output) {
+					$http.post('/friends', info)
+					.success(function(output) {
 						friends.push({
 							name: info.name,
 							age: info.age
@@ -33,10 +35,11 @@
 				}
 
 				factory.delete = function(friend, callback) {
-					$http.delete('friends/' + friend._id).success(function(output) {
+					$http.delete('friends/' + friend._id)
+					.success(function(output) {
 						friends = output;
 						callback(friends);
-					});
+			    })
 				}
 
 				
@@ -61,7 +64,10 @@
 				};
 
 				$scope.deleteFriend = function(friend) {
-					FriendFactory.delete(friend);
+					FriendFactory.delete(friend, function(data) {
+						$scope.friends = data;
+					});
+					
 				}
 			})
 		</script>

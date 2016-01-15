@@ -29,7 +29,14 @@ module.exports = (function() {
 			Friend.remove({_id: req.params.friend_id}, function(err) {
 				if (err) {
 					console.log('Still there.');
-				} 
+				} else {
+					Friend.find({}, function(error, results) {
+						if (error) {
+						} else {
+							res.json(results);
+						}
+					})
+				}
 			})
 		}
 	}

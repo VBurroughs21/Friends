@@ -2,8 +2,8 @@
   "name": "Friends",
   "version": "0.0.1",
   "dependencies": {
-    "express": "~4.2.0",
-    "mongoose": "latest",
-    "body-parser": "latest"
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "mongoose": "^4.3.5"
   }
 }

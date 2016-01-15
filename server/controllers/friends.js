@@ -18,9 +18,10 @@ module.exports = (function() {
 			var friend = new Friend(req.body);
 			friend.save(function(err) {
 				if(err) {
-	      console.log('Nope');
+	      	console.log('Nope');
 	    	} else { 
-	      console.log(friend);
+	      	console.log(friend);
+	      	res.json(friend);
 	    	}
 			})
 		}

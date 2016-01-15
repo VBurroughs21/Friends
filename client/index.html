@@ -12,6 +12,7 @@
 			friendsApp.factory('FriendFactory', function($http) {
 				var factory = {};
 				var friends = [];
+				factory.friend = {};
 
 				factory.index = function(callback) {
 			    $http.get('/friends').success(function(output) {
@@ -20,39 +21,47 @@
 			    })
 			  }
 
-
-
-				factory.getFriends = function(callback) {
-					$http.get('/friends').success(function(output) {
-						friends = output;
-						callback(friends);
-					})
-				}
-
 				factory.create = function(info, callback) {
+					
 					$http.post('/friends', info).success(function(output) {
-						friends.push(
-							{name: info.name, age: info.age}
-						);
-						friends = output;
+						debugger;
+						
+						friends.push({
+							name: info.name,
+							age: info.age
+						});
 						callback(friends);
+
 					})	
 				}
+
+				factory.delete = function() {
+					$http.get('friends/:id')
+				}
+
+				
+
 				return factory;
 			});
 
 			//CONTROLLER
-			friendsApp.controller('FriendsController', function ($scope, FriendFactory) {
+			friendsApp.controller('FriendsController', function ($http, $scope, FriendFactory) {
+
+				$scope.formData = {};
 
 				FriendFactory.index(function(data) {
 					$scope.friends = data;
 				});
 
 				$scope.addFriend = function() {
-					FriendFactory.create($scope.new_friend, function() {
-						$scope.friends = FriendFactory.index();
+					FriendFactory.create($scope.new_friend, function(friends) {
+						$scope.friends = friends;
 						$scope.new_friend = {};
 					});
+				};
+
+				$scope.deleteFriend = function(friend) {
+					FriendFactory.delete();
 				}
 			})
 		</script>
@@ -63,7 +72,8 @@
 		{{filter_name}}
 		<ul>
 			<li ng-repeat="friend in friends | filter: filter_name">
-				{{friend.name}}, {{friend.age}}
+				{{friend.name}}, {{friend.age}} 
+				<input type="submit" value="Delete" ng-click="deleteFriend(delete)">
 			</li>
 		</ul>
 		<h1>Add a Friend</h1>
